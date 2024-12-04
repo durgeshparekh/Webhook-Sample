@@ -14,24 +14,18 @@ app.use(bodyParser.json());
 
 // Webhook endpoint to listen for GitHub events
 app.post('/github-webhook', (req, res) => {
-   // Get the signature from the request headers
+   console.log('Request Headers:', req.headers);  // Log the headers
+   console.log('Request Body:', req.body);  // Log the request body
+
+   // Signature validation and processing
    const signature = req.headers['x-hub-signature'];
-
-   // Get the raw payload body
    const payload = JSON.stringify(req.body);
-
-   // Calculate the HMAC of the payload using the secret
    const hash = 'sha1=' + crypto.createHmac('sha1', SECRET).update(payload).digest('hex');
 
-   // Compare the computed hash with the signature from GitHub
    if (signature !== hash) {
       return res.status(400).send('Webhook signature mismatch');
    }
 
-   // Handle the payload (e.g., log it)
-   console.log('Received payload:', req.body);
-
-   // Respond with a 200 OK to GitHub
    res.status(200).send('Webhook received');
 });
 
