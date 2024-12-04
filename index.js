@@ -7,7 +7,8 @@ const app = express();
 const port = 3000;
 
 // Secret for verifying GitHub webhook payloads
-const SECRET = 'webhook-secret';  // Change this to your GitHub webhook secret
+const SECRET = crypto.randomBytes(32).toString('hex');  // Change this to your GitHub webhook secret
+console.log(SECRET);
 
 // Middleware to parse JSON payloads
 app.use(bodyParser.json());
